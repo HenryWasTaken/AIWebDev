@@ -20,10 +20,11 @@ if "openai_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "system", "content": system_prompt}]  # Include system prompt
 
-# Display conversation history
+# Display conversation history (excluding the system prompt)
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    if message["role"] != "system":  # Skip system messages
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
 # Input field for user to ask a question
 user_input = st.chat_input("Ask something:")
@@ -58,3 +59,4 @@ if user_input:
 
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
+
