@@ -11,7 +11,7 @@ import streamlit as st
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Streamlit App Title
-st.title("Chat GPT Clone with Image Generation")
+st.title("Personal Study Assistant")
 
 # Initialize session state for model and messages
 if "openai_model" not in st.session_state:
