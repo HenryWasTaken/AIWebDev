@@ -19,7 +19,7 @@ st.markdown("<p style='color:white;'>This model is not intended to give a 'quick
 st.markdown("<p style='color:white;'>Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
 
 # Add the dropdown box to show the system prompt
-with st.expander("View the prompt given to the computer"):
+with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
 
 # Initialize session state for model and messages
