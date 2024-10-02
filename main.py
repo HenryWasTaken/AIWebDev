@@ -18,7 +18,7 @@ st.markdown("<p style='color:white;'>Important: This demo does not log or store 
 
 # Add the contact information
 st.markdown("<p style='color:white;'>Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
-st.markdown("Pre-alpha 1.0.1, Here's a bouquet &mdash;\
+st.markdown("Pre-alpha, Here's a bouquet &mdash;\
             :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
 
 # Add the dropdown box to show the system prompt
