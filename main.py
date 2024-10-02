@@ -13,7 +13,8 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Streamlit App Title with different text styles
 st.markdown("<h1 style='color:white;'>StudyGPT Demo</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color:grey; font-size: small;'>This is a demo of StudyGPT, a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems!</p>", unsafe_allow_html=True)
-st.markdown("<p style='color:white;'>This model is not intended to be used for just doing your homework (Don't be lazy!) and is not a substitute for being a teacher.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>This model is not intended to be used getting a 'quick' answer for your last-minute homework and is not a substitute for being a teacher.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>Important: Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This demo does not log or store any data. All content sent to OpenAI is exempt from their training data.</p>", unsafe_allow_html=True)
 
 # Add the dropdown box to show the system prompt
