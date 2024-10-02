@@ -71,7 +71,7 @@ if user_input:
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
 
-# Add a small comment at the middle bottom of the webpage
+# Add CSS for the small comments
 st.markdown(
     """
     <style>
@@ -83,16 +83,6 @@ st.markdown(
         font-size: 12px;
         color: grey;
     }
-    </style>
-    <div class="middle-bottom-comment">This is still a prototype. Still check important info.</div>
-    """,
-    unsafe_allow_html=True
-)
-
-# Add a small comment on the bottom right for version 1.0 alpha
-st.markdown(
-    """
-    <style>
     .small-comment {
         position: fixed;
         bottom: 10px;
@@ -101,6 +91,7 @@ st.markdown(
         color: grey;
     }
     </style>
+    <div class="middle-bottom-comment">This is still a prototype. Still check important info.</div>
     <div class="small-comment">1.0 alpha</div>
     """,
     unsafe_allow_html=True
