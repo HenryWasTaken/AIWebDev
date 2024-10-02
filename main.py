@@ -16,7 +16,7 @@ st.markdown("<p style='color:grey; font-size: small;'>This is a demo of StudyGPT
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and is not a substitute for a teacher.</p>", unsafe_allow_html=True)
 
 # Add the contact information
-st.markdown("<p style='color:white;'>Important: Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
 
 # Add the dropdown box to show the system prompt
 with st.expander("View the prompt given to the computer"):
@@ -70,6 +70,24 @@ if user_input:
 
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
+
+# Add a small comment at the middle bottom of the webpage
+st.markdown(
+    """
+    <style>
+    .middle-bottom-comment {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        color: grey;
+    }
+    </style>
+    <div class="middle-bottom-comment">This is still a prototype. Still check important info.</div>
+    """,
+    unsafe_allow_html=True
+)
 
 # Add a small comment on the bottom right for version 1.0 alpha
 st.markdown(
