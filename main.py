@@ -11,14 +11,15 @@ import streamlit as st
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Streamlit App Title with different text styles
-st.markdown("<h1 style='color:white;'>StudyGPT Prototype</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:white;'>StudyGPT Demo</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color:grey; font-size: small;'>This is a demo of StudyGPT, a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems!</p>", unsafe_allow_html=True)
-st.markdown("<p style='color:white;'>This model is not intended to be used for getting a 'quick' answer for your last-minute homework and is not a substitute for being a teacher.</p>", unsafe_allow_html=True)
-st.markdown("<p style='color:white;'>Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
-st.markdown("<p style='color:white;'>Important: This demo does not log or store any data. All content sent to OpenAI is exempt from their training data.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and is not a substitute for a teacher.</p>", unsafe_allow_html=True)
+
+# Add the contact information
+st.markdown("<p style='color:white;'>Important: Contact: <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun</a></p>", unsafe_allow_html=True)
 
 # Add the dropdown box to show the system prompt
-with st.expander("This is the GPT's Mission!"):
+with st.expander("View the prompt given to the computer"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
 
 # Initialize session state for model and messages
@@ -35,7 +36,7 @@ for message in st.session_state.messages:
             st.markdown(message["content"])
 
 # Input field for user to ask a question
-user_input = st.chat_input("Ask something:")
+user_input = st.chat_input("Throw a question!")
 
 # Comment under the input box
 st.markdown("<p style='color:grey; font-size: small;'>This is still a prototype. Still check important info.</p>", unsafe_allow_html=True)
@@ -63,7 +64,6 @@ if user_input:
     # Add the AI's response to the conversation history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    
     # Generate and display image based on user input
     # image_url = generate_image(user_input)
     # st.image(image_url, caption="Generated Image")
