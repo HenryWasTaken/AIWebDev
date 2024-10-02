@@ -16,6 +16,10 @@ st.markdown("<p style='color:grey; font-size: small;'>This is a demo of StudyGPT
 st.markdown("<p style='color:white;'>This model is not intended to be used for just doing your homework (Don't be lazy!) and is not a substitute for being a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This demo does not log or store any data. All content sent to OpenAI is exempt from their training data.</p>", unsafe_allow_html=True)
 
+# Add the dropdown box to show the system prompt
+with st.expander("View the prompt given to the computer"):
+    st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
+
 # Initialize session state for model and messages
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4"
