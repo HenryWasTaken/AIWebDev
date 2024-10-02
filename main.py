@@ -89,3 +89,19 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Add a small comment on the bottom right for version 1.0 alpha
+st.markdown(
+    """
+    <style>
+    .small-comment {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        color: grey;
+    }
+    </style>
+    <div class="small-comment">1.0 alpha</div>
+    """,
+    unsafe_allow_html=True
+)
