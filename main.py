@@ -11,7 +11,14 @@ import streamlit as st
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Streamlit App Title
-st.title("Personal Study Assistant")
+st.markdown("# StudyGPT Demo")
+st.markdown("""
+### This is a demo of StudyGPT, a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems!
+
+**This model is not intended to be used for just doing your homework (Don't be lazy!) and is not a substitute for being a teacher.**
+
+**Important:** This demo does not log or store any data. All content sent to OpenAI is exempt from their training data.
+""")
 
 # Initialize session state for model and messages
 if "openai_model" not in st.session_state:
@@ -59,4 +66,3 @@ if user_input:
 
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
-
