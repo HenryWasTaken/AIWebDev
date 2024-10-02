@@ -30,7 +30,10 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4"
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "system", "content": system_prompt}]  # Include system prompt
+    st.session_state.messages = [
+        {"role": "system", "content": system_prompt},  # Include system prompt
+        {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
+    ]
 
 # Display conversation history (excluding the system prompt)
 for message in st.session_state.messages:
