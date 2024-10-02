@@ -11,7 +11,7 @@ import streamlit as st
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Streamlit App Title with different text styles
-st.markdown("<h1 style='color:white;'>StudyGPT Demo</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:white;'>StudyGPT Pre-alpha 1.0.1</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color:grey; font-size: small;'>This is a demo of StudyGPT, a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems!</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and is not a substitute for a teacher.</p>", unsafe_allow_html=True)
 
@@ -39,9 +39,6 @@ for message in st.session_state.messages:
 
 # Input field for user to ask a question
 user_input = st.chat_input("Throw a question!")
-
-# Comment under the input box
-st.markdown("<p style='color:grey; font-size: small;'>This is still a prototype. Still check important info.</p>", unsafe_allow_html=True)
 
 # Process user input when it's submitted
 if user_input:
@@ -72,3 +69,7 @@ if user_input:
 
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
+
+# Comment under the input box
+st.markdown("<p style='color:grey; font-size: small;'>This is still a prototype. Still check important info.</p>", unsafe_allow_html=True)
+
