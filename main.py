@@ -6,9 +6,9 @@ from AIImage import generate_image
 import streamlit as st
 
 # Load environment variables
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
+#load_dotenv()
+#api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Streamlit App Title
 st.title("Chat GPT Clone with Image Generation")
@@ -51,11 +51,10 @@ if user_input:
     # Add the AI's response to the conversation history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    '''
+    
     # Generate and display image based on user input
-    image_url = generate_image(user_input)
-    st.image(image_url, caption="Generated Image")
+    # image_url = generate_image(user_input)
+    # st.image(image_url, caption="Generated Image")
 
     # Optionally display the image URL
-    st.write(f"Image URL: {image_url}")
-    '''
+    # st.write(f"Image URL: {image_url}")
