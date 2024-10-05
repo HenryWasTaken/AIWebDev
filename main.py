@@ -20,41 +20,29 @@ st.markdown("<p style='color:white;'>Important: This GPT does not log or store a
 with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
 
-# Initialize session state for conversations
-if "conversations" not in st.session_state:
-    st.session_state.conversations = []
-
-# Initialize current conversation
-if "current_conversation" not in st.session_state:
-    st.session_state.current_conversation = []
-
 # Adding Sidebar
-st.sidebar.markdown("## Previous Conversations")
+st.sidebar.markdown("## Sidebar")
 
-# Add each previous conversation to the sidebar
-for i, convo in enumerate(st.session_state.conversations):
-    if st.sidebar.button(f"Conversation {i+1}"):
-        # Load the selected conversation into current chat
-        st.session_state.current_conversation = convo
-
-# New Chat button to start a new conversation
-if st.sidebar.button("🆕 New Chat"):
-    # Save the current conversation
-    if st.session_state.current_conversation:
-        st.session_state.conversations.append(st.session_state.current_conversation)
-    
-    # Start a new conversation
-    st.session_state.current_conversation = [
+# New Chat button at the top of the sidebar
+if st.sidebar.button("New Chat"):
+    # Reset the conversation history
+    st.session_state.messages = [
         {"role": "system", "content": system_prompt},  # Include system prompt
         {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
     ]
 
-# Initialize session state for the OpenAI model
+# Initialize session state for model and messages
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4"
 
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "system", "content": system_prompt},  # Include system prompt
+        {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
+    ]
+
 # Display conversation history (excluding the system prompt)
-for message in st.session_state.current_conversation:
+for message in st.session_state.messages:
     if message["role"] != "system":  # Skip system messages
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -64,8 +52,8 @@ user_input = st.chat_input("Throw a question!")
 
 # Process user input when it's submitted
 if user_input:
-    # Add the user input to the current conversation
-    st.session_state.current_conversation.append({"role": "user", "content": user_input})
+    # Add the user input to the conversation history
+    st.session_state.messages.append({"role": "user", "content": user_input})
 
     # Display user input in the chat interface
     with st.chat_message("user"):
@@ -76,14 +64,14 @@ if user_input:
         # Call the OpenAI API
         completion = client.chat.completions.create(
             model=st.session_state["openai_model"],
-            messages=st.session_state.current_conversation,
+            messages=st.session_state.messages,
             temperature=0.5,
         )
         response = completion.choices[0].message.content
         st.markdown(response)
 
-    # Add the AI's response to the current conversation
-    st.session_state.current_conversation.append({"role": "assistant", "content": response})
+    # Add the AI's response to the conversation history
+    st.session_state.messages.append({"role": "assistant", "content": response})
 
     # Optionally generate and display images based on user input
     # image_url = generate_image(user_input)
