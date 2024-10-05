@@ -22,11 +22,9 @@ with st.expander("The GPT's Mission!"):
 
 # Adding Sidebar
 st.sidebar.markdown("## Sidebar")
-st.sidebar.markdown("This is where you can provide extra functionality like links, tools, and more information.")
-st.sidebar.markdown("Feel free to add more options here.")
 
 # New Chat button at the top of the sidebar
-if st.sidebar.button("🆕 New Chat"):
+if st.sidebar.button("New Chat"):
     # Reset the conversation history
     st.session_state.messages = [
         {"role": "system", "content": system_prompt},  # Include system prompt
