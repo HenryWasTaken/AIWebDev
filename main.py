@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+from prompt import system_prompt
+from AIImage import generate_image
 import streamlit as st
 # from prompt import system_prompt  # Assuming you have a predefined system prompt
 # from AIImage import generate_image  # Assuming this is your image generation function
