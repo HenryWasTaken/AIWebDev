@@ -17,7 +17,7 @@ st.markdown("<p style='color:white;'>This model is not intended to give a 'quick
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
 # Add the contact information
-st.markdown("<p style='color:white;'>Under the development of:  <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Henry Sun, AI Web Development Club</a></p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>Under the development of:  <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Abingdon AI Web Development Club</a></p>", unsafe_allow_html=True)
 st.markdown("Pre-alpha, Here's a bouquet &mdash;\
             :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
 
