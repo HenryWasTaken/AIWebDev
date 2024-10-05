@@ -24,7 +24,7 @@ with st.expander("The GPT's Mission!"):
 st.sidebar.markdown("## Sidebar")
 
 # New Chat button at the top of the sidebar
-if st.button("New Chat"):
+if st.button("Clear Chat"):
     # Reset the conversation history
     st.session_state.messages = [
         {"role": "system", "content": system_prompt},  # Include system prompt
