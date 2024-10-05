@@ -16,13 +16,22 @@ st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of pro
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
-st.markdown("<p style='color:white;'>Under the development of:  <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Abingdon AI Web Development Club</a></p>", unsafe_allow_html=True)
-st.markdown("Pre-alpha, Here's a bouquet &mdash;\
-            :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
-
 # Add the dropdown box to show the system prompt
 with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
+
+# Adding Sidebar
+st.sidebar.markdown("## Sidebar")
+st.sidebar.markdown("This is where you can provide extra functionality like links, tools, and more information.")
+st.sidebar.markdown("Feel free to add more options here.")
+
+# New Chat button at the top of the sidebar
+if st.sidebar.button("🆕 New Chat"):
+    # Reset the conversation history
+    st.session_state.messages = [
+        {"role": "system", "content": system_prompt},  # Include system prompt
+        {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
+    ]
 
 # Initialize session state for model and messages
 if "openai_model" not in st.session_state:
@@ -66,11 +75,9 @@ if user_input:
     # Add the AI's response to the conversation history
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Generate and display images based on user input
+    # Optionally generate and display images based on user input
     # image_url = generate_image(user_input)
     # st.image(image_url, caption="Generated Image")
 
     # Optionally display the image URL
     # st.write(f"Image URL: {image_url}")
-
-
