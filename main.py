@@ -16,7 +16,6 @@ st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of pro
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
-# Add the contact information
 st.markdown("<p style='color:white;'>Under the development of:  <a href='mailto:henry.sun@abingdon.org.uk' style='color:white;'>Abingdon AI Web Development Club</a></p>", unsafe_allow_html=True)
 st.markdown("Pre-alpha, Here's a bouquet &mdash;\
             :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
