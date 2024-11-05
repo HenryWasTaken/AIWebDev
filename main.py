@@ -20,9 +20,6 @@ st.markdown("<p style='color:white;'>Important: This GPT does not log or store a
 with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
 
-st.page_link("main.py", label="Home", icon="Home")
-st.page_link("AIVision.py", label="AI Vision")
-
 # New Chat button at the top of the sidebar
 if st.button("Reset Chat"):
     # Reset the conversation history
