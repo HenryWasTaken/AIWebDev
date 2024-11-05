@@ -22,7 +22,7 @@ with st.expander("The GPT's Mission!"):
 
 st.page_link("main.py", label="Home", icon="Home")
 st.page_link("AIVision.py", label="AI Vision")
-=
+
 # New Chat button at the top of the sidebar
 if st.button("Reset Chat"):
     # Reset the conversation history
