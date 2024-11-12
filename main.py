@@ -11,12 +11,13 @@ import streamlit as st
 # api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Function to load conversations from a file
+# Function to load conversations from a file with error handling
 def load_conversations():
     try:
         with open('conversations.json', 'r') as f:
             return json.load(f)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Return default conversation if file is missing or contains invalid JSON
         return [
             {"role": "system", "content": system_prompt},
             {"role": "assistant", "content": "Hey there, how can I help you today?"}
