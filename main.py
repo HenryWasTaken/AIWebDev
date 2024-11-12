@@ -28,13 +28,13 @@ def save_conversations(conversations):
     with open('conversations.json', 'w') as f:
         json.dump(conversations, f)
 
-# Streamlit App Title with different text styles
+# Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
 st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems! This is still a prototype. Still check important info</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
-# Add the dropdown box to show the system prompt
+#dropdown box
 with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
 
@@ -43,12 +43,12 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4"
 
 if "messages" not in st.session_state:
-    # Load conversation history from file if available
+    # Load conversation history
     st.session_state.messages = load_conversations()
 
-# New Chat button at the top of the sidebar
+# New Chat button
 if st.button("Reset Chat"):
-    # Reset the conversation history in session state and in the file
+    # Reset the conversation history
     st.session_state.messages = [
         {"role": "system", "content": system_prompt},  # Include system prompt
         {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
@@ -61,10 +61,10 @@ for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-# Input field for the user to ask a question
+# Input
 user_input = st.chat_input("Throw a question!")
 
-# Process user input when it's submitted
+# Process user input
 if user_input:
     # Add the user input to the conversation history
     st.session_state.messages.append({"role": "user", "content": user_input})
