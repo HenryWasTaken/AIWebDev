@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from prompt import system_prompt
 from AIImage import generate_image
 import streamlit as st
+#Made by Henry Sun at Abingdon AI Web Development Club
 
 # Load environment variables
 # load_dotenv()
