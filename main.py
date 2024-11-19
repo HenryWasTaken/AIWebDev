@@ -91,7 +91,7 @@ if user_input:
 
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
-
+'''
     # Optionally generate and display an image based on user input
     try:
         image_url = generate_image(user_input)  # Call the image generation function
@@ -104,3 +104,4 @@ if user_input:
             save_conversations(st.session_state.messages)  # Save the updated conversation
     except Exception as e:
         st.error(f"Failed to generate an image: {e}")
+'''
