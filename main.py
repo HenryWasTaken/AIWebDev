@@ -102,13 +102,3 @@ if user_input:
         st.session_state.messages.append({"role": "assistant", "content": response})
         save_conversations(st.session_state.messages)
 
-# Image Generation
-if st.sidebar.button("Generate Image"):
-    image_description = st.text_input("Describe the image you want")
-    if image_description:
-        generated_image = generate_image(image_description)
-        st.image(generated_image)
-
-# Inspirational Content
-if st.sidebar.button("Show a Motivational Quote"):
-    st.sidebar.write("“The future belongs to those who believe in the beauty of their dreams.” – Eleanor Roosevelt")
