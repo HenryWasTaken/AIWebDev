@@ -75,7 +75,7 @@ with st.sidebar.expander("My Notes"):
             notes.append(new_note)
             with open('notes.json', 'w') as f:
                 json.dump(notes, f)  # Save updated notes
-            st.success("Note saved! Reload to show.")
+            st.success("Click again to confirm")
 
 #dropdown box
 with st.expander("The GPT's Mission!"):
