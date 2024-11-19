@@ -91,6 +91,11 @@ if user_input:
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
 
+     st.image(
+            "https://s3-us-west-2.amazonaws.com/uw-s3-cdn/wp-content/uploads/sites/6/2017/11/04133712/waterfall.jpg",
+            width=400, # Manually Adjust the width of the image as per requirement
+        )
+
     # Optionally generate and display images based on user input
     # image_url = generate_image(user_input)
     # st.image(image_url, caption="Generated Image")
