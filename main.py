@@ -28,6 +28,13 @@ def load_conversations():
 def save_conversations(conversations):
     with open('conversations.json', 'w') as f:
         json.dump(conversations, f)
+# Load saved notes
+def load_notes():
+    try:
+        with open('notes.json', 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
@@ -35,6 +42,11 @@ st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of pro
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
+st.sidebar.title("Settings & Features")
+st.sidebar.write("Adjust settings, explore features, or access additional tools.")
+
+# Custom Prompt Categories
+category = st.sidebar.selectbox("Choose a Category", ["General", "Homework Help", "Programming", "Math/Science", "Exam Prep"])
 
 # Advanced Model Tuning
 temperature = st.sidebar.slider("Response Creativity (Temperature)", 0.0, 1.0, 0.5)
