@@ -1,47 +1,33 @@
 import os
 import json
-import streamlit as st
 from openai import OpenAI
 from dotenv import load_dotenv
-from AIImage import generate_image
 from prompt import system_prompt
+from AIImage import generate_image
+import streamlit as st
+#Made by Henry Sun at Abingdon AI Web Development Club
 
 # Load environment variables
 # load_dotenv()
 # api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Function to load conversations
+# Function to load conversations from a file with error handling
 def load_conversations():
     try:
         with open('conversations.json', 'r') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return [{"role": "system", "content": system_prompt}]
+        # Return default conversation if file is missing or contains invalid JSON
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "assistant", "content": "Hey there, how can I help you today?"}
+        ]
 
-# Function to save conversations
+# Function to save conversations to a file
 def save_conversations(conversations):
     with open('conversations.json', 'w') as f:
         json.dump(conversations, f)
-
-# Function to save personal notes
-def save_notes(note):
-    try:
-        with open('notes.json', 'r') as f:
-            notes = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        notes = []
-    notes.append(note)
-    with open('notes.json', 'w') as f:
-        json.dump(notes, f)
-
-# Load saved notes
-def load_notes():
-    try:
-        with open('notes.json', 'r') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
@@ -70,61 +56,40 @@ if st.button("Reset Chat"):
         {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
     ]
     save_conversations(st.session_state.messages)  # Save reset conversation to file
-    
-st.sidebar.title("Settings & Features")
-st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
-# Custom Prompt Categories
-category = st.sidebar.selectbox("Choose a Category", ["General", "Homework Help", "Programming", "Math/Science", "Exam Prep"])
-
-# Advanced Model Tuning
-temperature = st.sidebar.slider("Response Creativity (Temperature)", 0.0, 1.0, 0.5)
-st.sidebar.markdown("### Model Parameters Adjusted")
-
-# Notes Section
-with st.sidebar.expander("My Notes"):
-    for note in load_notes():
-        st.markdown(f"- {note}")
-    new_note = st.text_input("Add a Note", key="note_input")
-    if st.button("Save Note"):
-        if new_note:
-            save_notes(new_note)
-            st.success("Note saved!")
-
-# Load conversations
-if "messages" not in st.session_state:
-    st.session_state.messages = load_conversations()
-
-# Reset Chat Button
-if st.sidebar.button("Reset Chat"):
-    st.session_state.messages = [{"role": "system", "content": system_prompt}]
-    save_conversations(st.session_state.messages)
-
-# Chat Display
+# Display conversation history (excluding the system prompt)
 for message in st.session_state.messages:
-    if message["role"] != "system":
+    if message["role"] != "system":  # Skip system messages
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-# User Input
-user_input = st.chat_input("Ask a question...")
+# Input
+user_input = st.chat_input("Throw a question!")
+
+# Process user input
 if user_input:
-    # Add user input to chat history
+    # Add the user input to the conversation history
     st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Display user input in the chat interface
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Generate AI response
+    # Generate AI response using the OpenAI API
     with st.chat_message("assistant"):
+        # Call the OpenAI API
         completion = client.chat.completions.create(
-            model="gpt-4",
+            model=st.session_state["openai_model"],
             messages=st.session_state.messages,
-            temperature=temperature,
+            temperature=0.5,
         )
         response = completion.choices[0].message.content
         st.markdown(response)
 
-        # Save conversation
+        # Add the AI's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
-        save_conversations(st.session_state.messages)
 
+    # Save updated conversation history to file
+    save_conversations(st.session_state.messages)
+
+    
