@@ -54,13 +54,31 @@ st.sidebar.markdown("### Model Parameters Adjusted")
 
 # Notes Section
 with st.sidebar.expander("My Notes"):
-    for note in load_notes():
-        st.markdown(f"- {note}")
+    notes = load_notes()  # Load saved notes
+    if notes:
+        for i, note in enumerate(notes):
+            col1, col2 = st.columns([0.8, 0.2])
+            with col1:
+                st.markdown(f"- {note}")
+            with col2:
+                if st.button("❌", key=f"delete_note_{i}"):  # Add delete button
+                    notes.pop(i)  # Remove the note
+                    with open('notes.json', 'w') as f:
+                        json.dump(notes, f)  # Save updated notes
+                    st.experimental_rerun()  # Refresh the app to reflect changes
+    else:
+        st.markdown("No notes saved.")
+
+    # Add a new note
     new_note = st.text_input("Add a Note", key="note_input")
     if st.button("Save Note"):
         if new_note:
-            save_notes(new_note)
+            notes.append(new_note)
+            with open('notes.json', 'w') as f:
+                json.dump(notes, f)  # Save updated notes
             st.success("Note saved!")
+            st.experimental_rerun()  # Refresh the app to display the new note
+
 
 #dropdown box
 with st.expander("The GPT's Mission!"):
