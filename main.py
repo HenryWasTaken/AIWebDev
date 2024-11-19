@@ -86,16 +86,21 @@ if user_input:
         response = completion.choices[0].message.content
         st.markdown(response)
 
-    # Add the AI's response to the conversation history
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        # Add the AI's response to the conversation history
+        st.session_state.messages.append({"role": "assistant", "content": response})
 
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
 
+    # Optionally generate and display an image based on user input
+    try:
+        image_url = generate_image(user_input)  # Call the image generation function
+        if image_url:
+            # Display the generated image
+            st.image(image_url, caption="Generated Image", use_column_width=True)
 
-    # Optionally generate and display images based on user input
-    # image_url = generate_image(user_input)
-    # st.image(image_url, caption="Generated Image")
-
-    # Optionally display the image URL
-    # st.write(f"Image URL: {image_url}")
+            # Optionally add image metadata to the conversation (for audit purposes)
+            st.session_state.messages.append({"role": "assistant", "content": f"Generated image: {image_url}"})
+            save_conversations(st.session_state.messages)  # Save the updated conversation
+    except Exception as e:
+        st.error(f"Failed to generate an image: {e}")
