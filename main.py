@@ -65,7 +65,6 @@ with st.sidebar.expander("My Notes"):
                     notes.pop(i)  # Remove the note
                     with open('notes.json', 'w') as f:
                         json.dump(notes, f)  # Save updated notes
-                        st.success("Note deleted! Reload the page.")
     else:
         st.markdown("No notes saved.")
 
@@ -76,7 +75,7 @@ with st.sidebar.expander("My Notes"):
             notes.append(new_note)
             with open('notes.json', 'w') as f:
                 json.dump(notes, f)  # Save updated notes
-            st.success("Note saved! Reload the page.")
+            st.success("Note saved! Reload to show.")
 
 #dropdown box
 with st.expander("The GPT's Mission!"):
