@@ -43,8 +43,34 @@ def load_notes():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
-# Streamlit App
-st.title("StudyGPT")
+# Streamlit App Title
+st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems! This is still a prototype. Still check important info</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
+
+
+#dropdown box
+with st.expander("The GPT's Mission!"):
+    st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
+
+# Initialize session state for model and messages
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-4"
+
+if "messages" not in st.session_state:
+    # Load conversation history
+    st.session_state.messages = load_conversations()
+
+# New Chat button
+if st.button("Reset Chat"):
+    # Reset the conversation history
+    st.session_state.messages = [
+        {"role": "system", "content": system_prompt},  # Include system prompt
+        {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
+    ]
+    save_conversations(st.session_state.messages)  # Save reset conversation to file
+    
 st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
