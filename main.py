@@ -92,15 +92,4 @@ if user_input:
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
 
-    # Optionally generate and display an image based on user input
-    #try:
-        #image_url = generate_image(user_input)  # Call the image generation function
-        #if image_url:
-            # Display the generated image
-            #st.image(image_url, caption="Generated Image", use_column_width=True)
-
-            # Optionally add image metadata to the conversation (for audit purposes)
-            #st.session_state.messages.append({"role": "assistant", "content": f"Generated image: {image_url}"})
-            #save_conversations(st.session_state.messages)  # Save the updated conversation
-    #except Exception as e:
-        #st.error(f"Failed to generate an image: {e}")
+    
