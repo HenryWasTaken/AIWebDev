@@ -65,7 +65,7 @@ with st.sidebar.expander("My Notes"):
                     notes.pop(i)  # Remove the note
                     with open('notes.json', 'w') as f:
                         json.dump(notes, f)  # Save updated notes
-                      st.success("Note deleted! Reload the page.")
+                        st.success("Note deleted! Reload the page.")
     else:
         st.markdown("No notes saved.")
 
