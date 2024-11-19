@@ -45,9 +45,6 @@ st.markdown("<p style='color:white;'>Important: This GPT does not log or store a
 st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
-# Custom Prompt Categories
-category = st.sidebar.selectbox("Choose a Category", ["General", "Homework Help", "Programming", "Math/Science", "Exam Prep"])
-
 # Advanced Model Tuning
 temperature = st.sidebar.slider("Response Creativity (Temperature)", 0.0, 1.0, 0.5)
 st.sidebar.markdown("### Model Parameters Adjusted")
