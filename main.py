@@ -36,6 +36,20 @@ st.markdown("<p style='color:white;'>This model is not intended to give a 'quick
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
 
+# Advanced Model Tuning
+temperature = st.sidebar.slider("Response Creativity (Temperature)", 0.0, 1.0, 0.5)
+st.sidebar.markdown("### Model Parameters Adjusted")
+
+# Notes Section
+with st.sidebar.expander("My Notes"):
+    for note in load_notes():
+        st.markdown(f"- {note}")
+    new_note = st.text_input("Add a Note", key="note_input")
+    if st.button("Save Note"):
+        if new_note:
+            save_notes(new_note)
+            st.success("Note saved!")
+
 #dropdown box
 with st.expander("The GPT's Mission!"):
     st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
