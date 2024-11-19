@@ -3,16 +3,15 @@ import openai
 from dotenv import load_dotenv
 
 load_dotenv()
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = api_key
 
 def generate_image(prompt):
     try:
-        response = client.images.generate(
-  model="dall-e-3",
-  prompt="a white siamese cat",
-  size="1024x1024",
-  quality="standard",
-  n=1,
+        dalle_response = openai.Image.create(
+            prompt=prompt,
+            n=1,
+            size="512x512"
         )
         return dalle_response["data"][0]["url"]
     except Exception as e:
