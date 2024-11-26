@@ -136,13 +136,6 @@ import streamlit as st
 st.sidebar.title("Navigation")
 tab = st.sidebar.radio("Select a Tab:", ["Chat", "Quiz Generator", "Notes"])
 
-# Tab Logic
-if tab == "Chat":
-    st.title("Chat with StudyGPT")
-    user_input = st.text_input("Ask a question:")
-    if user_input:
-        st.write(f"AI Response to: {user_input}")
-
 elif tab == "Quiz Generator":
     st.title("Quiz Generator")
     quiz_topic = st.text_input("Enter a topic for your quiz")
@@ -153,10 +146,5 @@ elif tab == "Quiz Generator":
             st.write("- Question 2")
             st.write("- Question 3")
 
-elif tab == "Notes":
-    st.title("My Notes")
-    note = st.text_input("Add a note:")
-    if st.button("Save Note"):
-        st.write(f"Note saved: {note}")
 
     
