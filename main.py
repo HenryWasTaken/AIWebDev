@@ -134,7 +134,7 @@ import streamlit as st
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
-tab = st.sidebar.radio("Select a Tab:", ["Chat", "Quiz Generator", "Notes"])
+tab = st.sidebar.radio("Select a Tab:", ["Quiz Generator"])
 
 if tab == "Quiz Generator":
     st.title("Quiz Generator")
