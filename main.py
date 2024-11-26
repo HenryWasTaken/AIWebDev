@@ -130,35 +130,5 @@ if user_input:
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
 
-# Add ELI5 mode toggle in the sidebar
-eli5_mode = st.sidebar.checkbox("Enable ELI5 Mode", value=False)
-
-# Modify the response generation to include ELI5 logic
-if user_input:
-    # Add the user input to the conversation history
-    st.session_state.messages.append({"role": "user", "content": user_input})
-
-    # Display user input in the chat interface
-    with st.chat_message("user"):
-        st.markdown(user_input)
-
-    # Generate AI response
-    with st.chat_message("assistant"):
-        # Adjust system prompt based on ELI5 mode
-        eli5_prompt = "Explain like I'm five. Use simple language and examples." if eli5_mode else ""
-        completion = client.chat.completions.create(
-            model=st.session_state["openai_model"],
-            messages=st.session_state.messages + [{"role": "system", "content": eli5_prompt}],
-            temperature=temperature,
-        )
-        response = completion.choices[0].message.content
-        st.markdown(response)
-
-    # Add the AI's response to the conversation history
-    st.session_state.messages.append({"role": "assistant", "content": response})
-
-    # Save updated conversation history to file
-    save_conversations(st.session_state.messages)
-
 
     
