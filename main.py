@@ -129,22 +129,3 @@ if user_input:
 
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
-
-import streamlit as st
-
-# Sidebar Navigation
-st.sidebar.title("Navigation")
-tab = st.sidebar.radio("Select a Tab:", ["Quiz Generator"])
-
-if tab == "Quiz Generator":
-    st.title("Quiz Generator")
-    quiz_topic = st.text_input("Enter a topic for your quiz")
-    if st.button("Generate Quiz"):
-        if quiz_topic:
-            st.write(f"Quiz on {quiz_topic}:")
-            st.write("- Question 1")
-            st.write("- Question 2")
-            st.write("- Question 3")
-
-
-    
