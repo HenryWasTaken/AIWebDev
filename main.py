@@ -160,29 +160,5 @@ if user_input:
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
 
-# Function to generate quizzes
-def generate_quiz(topic):
-    try:
-        completion = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a teacher who creates quizzes."},
-                {"role": "user", "content": f"Generate a 5-question quiz on {topic}."},
-            ],
-            temperature=0.7,
-        )
-        return completion.choices[0].message.content
-    except Exception as e:
-        return f"Error generating quiz: {e}"
-
-# If "Quiz Generator" is selected, display the Quiz Generator interface
-if tab == "Quiz Generator":
-    st.title("Quiz Generator")
-    quiz_topic = st.text_input("Enter a topic for your quiz")
-    if st.button("Generate Quiz"):
-        if quiz_topic:
-            quiz = generate_quiz(quiz_topic)
-            st.markdown(f"### Quiz on {quiz_topic}")
-            st.markdown(quiz)
 
     
