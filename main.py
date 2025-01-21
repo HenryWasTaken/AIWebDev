@@ -46,7 +46,7 @@ st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
 # Advanced Model Tuning
-chosen_temperature = 1.0
+chosen_temperature = 0.1
 st.sidebar.markdown(f"Temperature is {chosen_temperature} ")
 
 # Notes Section
