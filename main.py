@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from prompt import system_prompt
 from AIImage import generate_image
 import streamlit as st
+import pandas as pd
+from io import StringIO
+
 #Made by Henry Sun at Abingdon AI Web Development Club
 
 # Load environment variables
@@ -100,6 +103,11 @@ for message in st.session_state.messages:
     if message["role"] != "system":  # Skip system messages
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+
+#Let user upload files
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+    string_data = stringio.read() st.write(string_data)
 
 # Input
 user_input = st.chat_input("Throw a question!")
