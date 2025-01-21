@@ -107,7 +107,8 @@ for message in st.session_state.messages:
 #Let user upload files
 uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
-    string_data = stringio.read() st.write(string_data)
+    string_data = stringio.read()
+    st.write(string_data)
 
 # Input
 user_input = st.chat_input("Throw a question!")
