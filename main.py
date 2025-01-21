@@ -46,8 +46,8 @@ st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
 # Advanced Model Tuning
-temperature = 0.0
-st.sidebar.markdown(f"Temperature is {temperature} ")
+chosen_temperature = 0.0
+st.sidebar.markdown(f"Temperature is {chosen_temperature} ")
 
 # Notes Section
 with st.sidebar.expander("My Notes"):
@@ -119,7 +119,7 @@ if user_input:
         completion = client.chat.completions.create(
             model=st.session_state["openai_model"],
             messages=st.session_state.messages,
-            temperature=0.5,
+            temperature=chosen_temperature,
         )
         response = completion.choices[0].message.content
         st.markdown(response)
