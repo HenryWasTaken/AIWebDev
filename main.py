@@ -46,8 +46,8 @@ st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
 # Advanced Model Tuning
-temperature = st.sidebar.slider("Response Creativity (Temperature)", 0.0, 1.0, 0.5)
-st.sidebar.markdown("### Model Parameters Adjusted")
+temperature = 0.0
+st.sidebar.markdown(f"Temperature is {temperature} ")
 
 # Notes Section
 with st.sidebar.expander("My Notes"):
