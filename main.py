@@ -51,15 +51,6 @@ if uploaded_file is not None:
     string_data = stringio.read()
     st.write(string_data)
 
-# creating a pdf reader object
-reader = PdfReader(uploaded_file)
-# printing number of pages in pdf file
-print(len(reader.pages))
-# creating a page object
-page = reader.pages[0]
-# extracting text from page
-print(page.extract_text())
-
 st.sidebar.title("Settings & Features")
 st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
