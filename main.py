@@ -19,7 +19,7 @@ index_name = "study-gpt-index"
 
 # Create or connect to a Pinecone index
 if index_name not in pinecone.list_indexes():
-    pinecone.create_index(index_name, dimension=1536)  # 1536 is the dimension of OpenAI embeddings
+    pinecone.create_index(index_name, dimension=3072)  # Ensure this matches your embedding dimensions
 index = pinecone.Index(index_name)
 
 # System prompt (replace with your own)
