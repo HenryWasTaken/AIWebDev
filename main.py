@@ -1,14 +1,16 @@
-import os
-import json
+import openai
 import streamlit as st
-from openai import OpenAI
-from pypdf import PdfReader
 import pinecone
-from openai.embeddings_utils import get_embedding
+from pypdf import PdfReader
 
-# Initialize OpenAI and Pinecone clients
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Function to get embeddings using OpenAI
+def get_embedding(text, engine="text-embedding-ada-002"):
+    response = openai.Embedding.create(input=text, model=engine)
+    return response['data'][0]['embedding']
+
+# Initialize Pinecone and OpenAI
 pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="us-west1-gcp")
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Constants
 INDEX_NAME = "study-gpt-index"
