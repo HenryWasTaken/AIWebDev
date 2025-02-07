@@ -1,5 +1,6 @@
-openai
+openai>=0.27.0
 python-dotenv
 streamlit
 pypdf
 pinecone
+openai.embeddings_utils
