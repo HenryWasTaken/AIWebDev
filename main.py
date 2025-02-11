@@ -4,7 +4,7 @@ from openai import OpenAI
 import streamlit as st
 from pypdf import PdfReader
 import pinecone
-from openai.embeddings_utils import get_embedding
+
 
 # Load environment variables (if using .env)
 # from dotenv import load_dotenv
