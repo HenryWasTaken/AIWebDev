@@ -14,6 +14,10 @@ from pypdf import PdfReader
 # api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+# Initialize Pinecone
+pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="us-west1-gcp")
+index_name = "study-gpt-index"
+
 # Function to load conversations from a file with error handling
 def load_conversations():
     try:
