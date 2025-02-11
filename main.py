@@ -91,18 +91,16 @@ def retrieve_relevant_chunks(query, top_k=3):
         return []
     
     try:
-        # Use keyword arguments for the query method
         results = index.query(
-            vector=query_embedding,  # Specify the query vector
-            top_k=top_k,             # Number of top results to retrieve
-            include_metadata=True    # Include metadata in the results
+            vector=query_embedding,
+            top_k=top_k,
+            include_metadata=True
         )
         relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
         return relevant_chunks
     except Exception as e:
         st.error(f"Error querying Pinecone: {e}")
         return []
-
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
@@ -111,15 +109,22 @@ st.markdown("<p style='color:white;'>This model is not intended to give a 'quick
 st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
 
 # File Uploader
-uploaded_file = st.file_uploader("Choose a file (PDF only)")
+uploaded_file = st.file_uploader("Choose a file (PDF or TXT)", type=["pdf", "txt"])
 if uploaded_file is not None:
     if uploaded_file.type == "application/pdf":
+        # Extract text from PDF
         text = extract_text_from_pdf(uploaded_file)
         chunks = split_text_into_chunks(text)
         generate_and_store_embeddings(chunks)
-        st.success("File uploaded and processed successfully!")
+        st.success("PDF file uploaded and processed successfully!")
+    elif uploaded_file.type == "text/plain":
+        # Extract text from TXT
+        text = uploaded_file.read().decode("utf-8")  # Decode bytes to string
+        chunks = split_text_into_chunks(text)
+        generate_and_store_embeddings(chunks)
+        st.success("TXT file uploaded and processed successfully!")
     else:
-        st.error("Only PDF files are supported at the moment.")
+        st.error("Unsupported file type. Please upload a PDF or TXT file.")
 
 # Sidebar for Settings & Features
 st.sidebar.title("Settings & Features")
@@ -190,9 +195,6 @@ if user_input:
     # Retrieve relevant chunks
     relevant_chunks = retrieve_relevant_chunks(user_input)
     context = "\n\n".join(relevant_chunks)
-
-
-    
 
     # Augment the user's query with the retrieved context
     augmented_prompt = (
