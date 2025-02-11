@@ -109,7 +109,7 @@ def clear_context():
         index.delete(delete_all=True, namespace='default')
         
         st.success("All context has been cleared from the Pinecone index.")
-    except Exception as e:
+    except:
         st.error(f"Error clearing context: {e}")
 
 
