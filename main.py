@@ -1,35 +1,33 @@
 import os
 import json
 from openai import OpenAI
-from prompt import system_prompt
 import streamlit as st
-import pandas as pd
-from io import StringIO
 from pypdf import PdfReader
 from pinecone import Pinecone, ServerlessSpec
 
-#Made by Henry Sun at Abingdon AI Web Development Club
-
-# Load environment variables
-# load_dotenv()
-# api_key = os.getenv("OPENAI_API_KEY")
+# Initialize OpenAI and Pinecone clients
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-# Initialize Pinecone
 pc = Pinecone(api_key=st.secrets["PINECONE_API_KEY"])
+
+# Pinecone index name
 index_name = "study-gpt-index"
 
-pc.create_index(
-    name=index_name,
-    dimension=1536, # Replace with your model dimensions, 1536 is OpenAI small text embeddings
-    metric="cosine", # Replace with your model metric
-    spec=ServerlessSpec(
-        cloud="aws",
-        region="eu-west-2" #London for AWS
-    ) 
-)
+# Check if the index exists, and create it only if it doesn't
+if index_name not in pc.list_indexes().names():
+    pc.create_index(
+        name=index_name,
+        dimension=1536,  # OpenAI embedding dimension
+        metric="cosine",
+        spec=ServerlessSpec(
+            cloud="aws",
+            region="eu-west-2"  # London for AWS
+        )
+    )
 
-# System prompt (replace with your own)
+# Connect to the index
+index = pc.Index(index_name)
+
+# System prompt
 system_prompt = "You are StudyGPT, a helpful AI assistant designed to help students learn and solve problems. Provide detailed explanations and guide users to understand concepts."
 
 # Function to load conversations from a file
@@ -71,15 +69,23 @@ def split_text_into_chunks(text, chunk_size=500):
         chunks.append(text[i:i + chunk_size])
     return chunks
 
+# Function to generate embeddings
+def get_embedding(text, engine="text-embedding-ada-002"):
+    response = client.embeddings.create(
+        input=text,
+        model=engine
+    )
+    return response.data[0].embedding
+
 # Function to generate and store embeddings
 def generate_and_store_embeddings(chunks):
     for i, chunk in enumerate(chunks):
-        embedding = get_embedding(chunk, engine="text-embedding-ada-002")
+        embedding = get_embedding(chunk)
         index.upsert([(f"chunk-{i}", embedding, {"text": chunk})])
 
 # Function to retrieve relevant chunks
 def retrieve_relevant_chunks(query, top_k=3):
-    query_embedding = get_embedding(query, engine="text-embedding-ada-002")
+    query_embedding = get_embedding(query)
     results = index.query(query_embedding, top_k=top_k, include_metadata=True)
     relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
     return relevant_chunks
@@ -144,6 +150,8 @@ if "openai_model" not in st.session_state:
 
 if "messages" not in st.session_state:
     st.session_state.messages = load_conversations()
+    if not any(msg["role"] == "system" for msg in st.session_state.messages):
+        st.session_state.messages.insert(0, {"role": "system", "content": system_prompt})
 
 # Reset Chat button
 if st.button("Reset Chat"):
@@ -152,6 +160,7 @@ if st.button("Reset Chat"):
         {"role": "assistant", "content": "Hey there, how can I help you today?"}
     ]
     save_conversations(st.session_state.messages)
+    st.success("Chat history has been reset.")
 
 # Display conversation history (excluding system messages)
 for message in st.session_state.messages:
@@ -169,7 +178,11 @@ if user_input:
     context = "\n\n".join(relevant_chunks)
 
     # Augment the user's query with the retrieved context
-    augmented_prompt = f"Context:\n{context}\n\nQuestion: {user_input}"
+    augmented_prompt = (
+        "You are a helpful assistant. Use the following context to answer the user's question.\n\n"
+        f"Context:\n{context}\n\n"
+        f"Question: {user_input}"
+    )
 
     # Add the augmented prompt to the conversation history
     st.session_state.messages.append({"role": "user", "content": augmented_prompt})
@@ -180,13 +193,17 @@ if user_input:
 
     # Generate AI response using the OpenAI API
     with st.chat_message("assistant"):
-        completion = client.chat.completions.create(
-            model=st.session_state["openai_model"],
-            messages=st.session_state.messages,
-            temperature=chosen_temperature,
-        )
-        response = completion.choices[0].message.content
-        st.markdown(response)
+        try:
+            completion = client.chat.completions.create(
+                model=st.session_state["openai_model"],
+                messages=st.session_state.messages,
+                temperature=chosen_temperature,
+            )
+            response = completion.choices[0].message.content
+            st.markdown(response)
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            response = "Sorry, I couldn't generate a response. Please try again."
 
         # Add the AI's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
