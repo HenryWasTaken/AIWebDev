@@ -1,129 +1,140 @@
-import openai
+import os
+import json
+from openai import OpenAI
+from dotenv import load_dotenv
+from prompt import system_prompt
+from AIImage import generate_image
 import streamlit as st
-import pinecone
+import pandas as pd
+from io import StringIO
 from pypdf import PdfReader
 
-# Function to get embeddings using OpenAI
-def get_embedding(text, engine="text-embedding-ada-002"):
-    response = openai.Embedding.create(input=text, model=engine)
-    return response['data'][0]['embedding']
+#Made by Henry Sun at Abingdon AI Web Development Club
 
-# Initialize Pinecone and OpenAI
-pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="us-west1-gcp")
-client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Load environment variables
+# load_dotenv()
+# api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Constants
-INDEX_NAME = "study-gpt-index"
-SYSTEM_PROMPT = (
-    "You are StudyGPT, a helpful AI assistant designed to help students learn and solve problems. "
-    "Provide detailed explanations and guide users to understand concepts."
-)
-
-# Initialize Pinecone index
-if INDEX_NAME not in pinecone.list_indexes():
-    pinecone.create_index(INDEX_NAME, dimension=3072)
-index = pinecone.Index(INDEX_NAME)
-
-# Utility Functions
-def load_json_file(file_name, default_data):
+# Function to load conversations from a file with error handling
+def load_conversations():
     try:
-        with open(file_name, 'r') as f:
+        with open('conversations.json', 'r') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return default_data
+        # Return default conversation if file is missing or contains invalid JSON
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "assistant", "content": "Hey there, how can I help you today?"}
+        ]
 
-def save_json_file(file_name, data):
-    with open(file_name, 'w') as f:
-        json.dump(data, f)
+# Function to save conversations to a file
+def save_conversations(conversations):
+    with open('conversations.json', 'w') as f:
+        json.dump(conversations, f)
+# Load saved notes
+def load_notes():
+    try:
+        with open('notes.json', 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
 
-def extract_text_from_pdf(file):
-    reader = PdfReader(file)
-    return "".join(page.extract_text() for page in reader.pages)
-
-def split_text_into_chunks(text, chunk_size=500):
-    return [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
-
-def generate_and_store_embeddings(chunks):
-    for i, chunk in enumerate(chunks):
-        embedding = get_embedding(chunk, engine="text-embedding-ada-002")
-        index.upsert([(f"chunk-{i}", embedding, {"text": chunk})])
-
-def retrieve_relevant_chunks(query, top_k=3):
-    query_embedding = get_embedding(query, engine="text-embedding-ada-002")
-    results = index.query(query_embedding, top_k=top_k, include_metadata=True)
-    return [match["metadata"]["text"] for match in results["matches"]]
-
-# Load conversations and notes
-conversations = load_json_file("conversations.json", [
-    {"role": "system", "content": SYSTEM_PROMPT},
-    {"role": "assistant", "content": "Hey there, how can I help you today?"}
-])
-notes = load_json_file("notes.json", [])
-
-# Streamlit UI
+# Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
-st.markdown("""
-<p style='color:grey; font-size: small;'>StudyGPT helps students learn by providing detailed explanations. 
-It's not intended for quick homework solutions or as a teacher substitute. This prototype does not log or store any data.</p>
-""", unsafe_allow_html=True)
+st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of prompts designed to help students. To use, simply type the thing you need help with. The model will then guide you to solving your problems! This is still a prototype. Still check important info</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
+st.markdown("<p style='color:white;'>Important: This GPT does not log or store any data.</p>", unsafe_allow_html=True)
+#Let user upload files
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+    string_data = stringio.read()
+    st.write(string_data)
 
-uploaded_file = st.file_uploader("Choose a file (PDF only)")
-if uploaded_file and uploaded_file.type == "application/pdf":
-    text = extract_text_from_pdf(uploaded_file)
-    chunks = split_text_into_chunks(text)
-    generate_and_store_embeddings(chunks)
-    st.success("File uploaded and processed successfully!")
-elif uploaded_file:
-    st.error("Only PDF files are supported.")
-
-# Sidebar
 st.sidebar.title("Settings & Features")
-st.sidebar.markdown(f"Temperature: 0.1")
-st.sidebar.expander("My Notes").markdown(
-    "\n".join(f"- {note}" for note in notes) if notes else "No notes saved."
-)
+st.sidebar.write("Adjust settings, explore features, or access additional tools.")
 
-new_note = st.sidebar.text_input("Add a Note")
-if st.sidebar.button("Save Note") and new_note:
-    notes.append(new_note)
-    save_json_file("notes.json", notes)
-    st.sidebar.success("Note saved!")
+# Advanced Model Tuning
+chosen_temperature = 0.1
+st.sidebar.markdown(f"Temperature is {chosen_temperature} ")
 
-st.expander("The GPT's Mission").markdown(SYSTEM_PROMPT)
+# Notes Section
+with st.sidebar.expander("My Notes"):
+    notes = load_notes()  # Load saved notes
+    if notes:
+        for i, note in enumerate(notes):
+            col1, col2 = st.columns([0.8, 0.2])
+            with col1:
+                st.markdown(f"- {note}")
+            with col2:
+                if st.button("❌", key=f"delete_note_{i}"):  # Add delete button
+                    notes.pop(i)  # Remove the note
+                    with open('notes.json', 'w') as f:
+                        json.dump(notes, f)  # Save updated notes
+    else:
+        st.markdown("No notes saved.")
 
-# Chat Interface
+    # Add a new note
+    new_note = st.text_input("Add a Note", key="note_input")
+    if st.button("Save Note"):
+        if new_note:
+            notes.append(new_note)
+            with open('notes.json', 'w') as f:
+                json.dump(notes, f)  # Save updated notes
+            st.success("Click again to confirm")
+
+#dropdown box
+with st.expander("The GPT's Mission!"):
+    st.markdown(f"<p style='color:white;'>{system_prompt}</p>", unsafe_allow_html=True)
+
+# Initialize session state for model and messages
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-4"
+
 if "messages" not in st.session_state:
-    st.session_state.messages = conversations
+    # Load conversation history
+    st.session_state.messages = load_conversations()
 
+# New Chat button
 if st.button("Reset Chat"):
+    # Reset the conversation history
     st.session_state.messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "assistant", "content": "Hey there, how can I help you today?"}
+        {"role": "system", "content": system_prompt},  # Include system prompt
+        {"role": "assistant", "content": "Hey there, how can I help you today?"}  # AI's initial greeting
     ]
-    save_json_file("conversations.json", st.session_state.messages)
+    save_conversations(st.session_state.messages)  # Save reset conversation to file
 
+# Display conversation history (excluding the system prompt)
 for message in st.session_state.messages:
-    if message["role"] != "system":
+    if message["role"] != "system":  # Skip system messages
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-user_input = st.chat_input("Ask a question!")
-if user_input:
-    relevant_chunks = retrieve_relevant_chunks(user_input)
-    context = "\n\n".join(relevant_chunks)
-    augmented_prompt = f"Context:\n{context}\n\nQuestion: {user_input}"
+# Input
+user_input = st.chat_input("Throw a question!")
 
-    st.session_state.messages.append({"role": "user", "content": augmented_prompt})
+# Process user input
+if user_input:
+    # Add the user input to the conversation history
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    # Display user input in the chat interface
     with st.chat_message("user"):
         st.markdown(user_input)
 
+    # Generate AI response using the OpenAI API
     with st.chat_message("assistant"):
-        response = client.chat.completions.create(
-            model="gpt-4",
+        # Call the OpenAI API
+        completion = client.chat.completions.create(
+            model=st.session_state["openai_model"],
             messages=st.session_state.messages,
-            temperature=0.1
-        ).choices[0].message.content
+            temperature=chosen_temperature,
+        )
+        response = completion.choices[0].message.content
         st.markdown(response)
+
+        # Add the AI's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-    save_json_file("conversations.json", st.session_state.messages)
+    # Save updated conversation history to file
+    save_conversations(st.session_state.messages)
