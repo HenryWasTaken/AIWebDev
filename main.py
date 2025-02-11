@@ -2,7 +2,6 @@ import os
 import json
 from openai import OpenAI
 from prompt import system_prompt
-from AIImage import generate_image
 import streamlit as st
 import pandas as pd
 from io import StringIO
