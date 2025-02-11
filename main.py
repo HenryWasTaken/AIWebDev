@@ -110,7 +110,7 @@ def clear_context():
         
         st.success("All context has been cleared from the Pinecone index.")
     except:
-        st.error(f"Error clearing context: {e}")
+        st.error(f"Error clearing context.")
 
 
 
