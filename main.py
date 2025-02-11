@@ -91,12 +91,18 @@ def retrieve_relevant_chunks(query, top_k=3):
         return []
     
     try:
-        results = index.query(query_embedding, top_k=top_k, include_metadata=True)
+        # Use keyword arguments for the query method
+        results = index.query(
+            vector=query_embedding,  # Specify the query vector
+            top_k=top_k,             # Number of top results to retrieve
+            include_metadata=True    # Include metadata in the results
+        )
         relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
         return relevant_chunks
     except Exception as e:
         st.error(f"Error querying Pinecone: {e}")
         return []
+
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
