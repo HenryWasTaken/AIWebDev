@@ -1,6 +1,5 @@
 streamlit
+pinecone-client
 openai
 pypdf
-pinecone
-PyGithub
-langchain
+dotenv
