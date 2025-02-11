@@ -13,7 +13,7 @@ import pinecone
 
 # Initialize OpenAI and Pinecone clients
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-pinecone.init(api_key=st.secrets["PINECONE_API_KEY"])
+pinecone.init(api_key="pcsk_bzsWv_St3zBJAUWweT92HWauLLCjjvcJoRbkdKKJHLd8aoyRVgiocYjUcdE25PTxhPLVL", environment = "europe-west9-a")
 
 # Pinecone index name
 index_name = "study-gpt-index"
