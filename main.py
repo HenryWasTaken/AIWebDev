@@ -20,7 +20,7 @@ if index_name not in pc.list_indexes().names():
         metric="cosine",
         spec=ServerlessSpec(
             cloud="aws",
-            region="us-east-1"  # London for AWS
+            region="us-east-1"  # Virginia
         )
     )
 
