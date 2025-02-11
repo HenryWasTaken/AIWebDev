@@ -106,7 +106,7 @@ def retrieve_relevant_chunks(query, top_k=3):
 def clear_context():
     try:
         index = pc.Index(host=st.secrets["INDEX_HOST"])
-        index.delete(delete_all=True, namespace='default')
+        index.delete(delete_all=True, namespace='Default')
         
         st.success("All context has been cleared from the Pinecone index.")
     except:
