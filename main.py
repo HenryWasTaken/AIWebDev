@@ -86,9 +86,17 @@ def generate_and_store_embeddings(chunks):
 # Function to retrieve relevant chunks
 def retrieve_relevant_chunks(query, top_k=3):
     query_embedding = get_embedding(query)
-    results = index.query(query_embedding, top_k=top_k, include_metadata=True)
-    relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
-    return relevant_chunks
+    if not isinstance(query_embedding, list) or len(query_embedding) != 1536:
+        st.error("Invalid query embedding. Expected a list of 1536 floats.")
+        return []
+    
+    try:
+        results = index.query(query_embedding, top_k=top_k, include_metadata=True)
+        relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
+        return relevant_chunks
+    except Exception as e:
+        st.error(f"Error querying Pinecone: {e}")
+        return []
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
@@ -176,6 +184,9 @@ if user_input:
     # Retrieve relevant chunks
     relevant_chunks = retrieve_relevant_chunks(user_input)
     context = "\n\n".join(relevant_chunks)
+
+
+    
 
     # Augment the user's query with the retrieved context
     augmented_prompt = (
