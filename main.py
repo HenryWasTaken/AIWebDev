@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 from pypdf import PdfReader
+from pinecone import Pinecone, ServerlessSpec
 
 #Made by Henry Sun at Abingdon AI Web Development Club
 
@@ -15,8 +16,7 @@ from pypdf import PdfReader
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Initialize Pinecone
-pinecone.Pinecone(api_key=st.secrets["PINECONE_API_KEY"], environment="us-west1-gcp")
-index_name = "study-gpt-index"
+pc = Pinecone(api_key=st.secrets["PINECONE_API_KEY"])
 
 # Function to load conversations from a file with error handling
 def load_conversations():
