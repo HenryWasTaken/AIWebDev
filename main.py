@@ -102,13 +102,15 @@ def retrieve_relevant_chunks(query, top_k=3):
         st.error(f"Error querying Pinecone: {e}")
         return []
 
-# Function to clear the Pinecone context
+# Function to clear context from the Pinecone index
 def clear_context():
     try:
-        index.delete_all()  # Clears all entries in the index
-        st.success("Context successfully cleared!")
+        # Use delete with a wildcard filter to remove all vectors in the index
+        index.delete(filter={})  # Deletes all vectors in the index
+        st.success("All context has been cleared from the Pinecone index.")
     except Exception as e:
         st.error(f"Error clearing context: {e}")
+
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
@@ -141,6 +143,7 @@ st.sidebar.write("Adjust settings, explore features, or access additional tools.
 # Clear Context Button
 if st.sidebar.button("Clear Context"):
     clear_context()
+
 
 # Notes Section
 with st.sidebar.expander("My Notes"):
