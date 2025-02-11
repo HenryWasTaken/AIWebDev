@@ -170,7 +170,7 @@ def clear_pinecone_index():
 
 # Add a "Clear Context" button in the sidebar
 with st.sidebar:
-    if st.button("Clear Context From Previous Uploaded Files"):
+    if st.button("Clear Context"):
         clear_pinecone_index()
 
 
@@ -254,4 +254,3 @@ if user_input:
 
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
-
