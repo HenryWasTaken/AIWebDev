@@ -170,7 +170,7 @@ def clear_pinecone_index():
 
 # Add a "Clear Context" button in the sidebar
 with st.sidebar:
-    if st.button("Clear Context"):
+    if st.button("Clear Context From Previous Uploaded Files"):
         clear_pinecone_index()
 
 
