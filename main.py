@@ -3,7 +3,8 @@ import json
 from openai import OpenAI
 import streamlit as st
 from pypdf import PdfReader
-from pinecone import Pinecone, ServerlessSpec
+import pinecone
+
 
 
 # Load environment variables (if using .env)
@@ -12,7 +13,7 @@ from pinecone import Pinecone, ServerlessSpec
 
 # Initialize OpenAI and Pinecone clients
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-pc = Pinecone(api_key="pcsk_bzsWv_St3zBJAUWweT92HWauLLCjjvcJoRbkdKKJHLd8aoyRVgiocYjUcdE25PTxhPLVL")
+pinecone.init(api_key=st.secrets["PINECONE_API_KEY"])
 
 # Pinecone index name
 index_name = "study-gpt-index"
