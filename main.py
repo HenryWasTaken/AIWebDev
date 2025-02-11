@@ -108,6 +108,7 @@ st.markdown("<p style='color:grey; font-size: small;'>StudyGPT uses a set of pro
 st.markdown("<p style='color:white;'>This model is not intended to give a 'quick' answer to your last-minute homework, and would not be a substitute for a teacher.</p>", unsafe_allow_html=True)
 st.markdown("<p style='color:white;'>Important: This GPT is still under development and uses RAG (Retrieval-augmented generation) which may store data in a vector database. Avoid entering sensitive information.</p>", unsafe_allow_html=True)
 
+
 # File Uploader
 uploaded_file = st.file_uploader("Choose a file (PDF or TXT)", type=["pdf", "txt"])
 if uploaded_file is not None:
@@ -158,6 +159,20 @@ with st.sidebar.expander("My Notes"):
             with open('notes.json', 'w') as f:
                 json.dump(notes, f)
             st.success("Click again to confirm")
+
+# Function to clear all embeddings from the Pinecone index
+def clear_pinecone_index():
+    try:
+        index.delete(delete_all=True)
+        st.success("Context cleared successfully!")
+    except Exception as e:
+        st.error(f"Failed to clear context: {e}")
+
+# Add a "Clear Context" button in the sidebar
+with st.sidebar:
+    if st.button("Clear Context"):
+        clear_pinecone_index()
+
 
 # Dropdown box for GPT's Mission
 with st.expander("The GPT's Mission!"):
