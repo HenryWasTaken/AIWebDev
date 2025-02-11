@@ -105,19 +105,8 @@ def retrieve_relevant_chunks(query, top_k=3):
 # Function to clear context from the Pinecone index
 def clear_context():
     try:
-        # Retrieve all vector IDs in the index
-        vector_ids = []
-        response = index.describe_index_stats()
-        if "namespaces" in response:
-            for namespace in response["namespaces"]:
-                namespace_stats = response["namespaces"][namespace]
-                vector_ids.extend(namespace_stats.get("vector_ids", []))
-        
-        # Delete vectors in batches if they exist
-        if vector_ids:
-            for i in range(0, len(vector_ids), 100):
-                batch_ids = vector_ids[i:i + 100]
-                index.delete(ids=batch_ids)
+        index = pc.Index(host=st.secrets["INDEX_HOST"])
+        index.delete(delete_all=True, namespace='default')
         
         st.success("All context has been cleared from the Pinecone index.")
     except Exception as e:
