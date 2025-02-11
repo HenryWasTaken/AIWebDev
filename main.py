@@ -12,15 +12,6 @@ import pinecone
 
 # Initialize OpenAI and Pinecone clients
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="us-west1-gcp")
-
-# Pinecone index name
-index_name = "study-gpt-index"
-
-# Create or connect to a Pinecone index
-if index_name not in pinecone.list_indexes():
-    pinecone.create_index(index_name, dimension=1536)  # 1536 is the dimension of OpenAI embeddings
-index = pinecone.Index(index_name)
 
 # System prompt (replace with your own)
 system_prompt = "You are StudyGPT, a helpful AI assistant designed to help students learn and solve problems. Provide detailed explanations and guide users to understand concepts."
@@ -35,47 +26,6 @@ def load_conversations():
             {"role": "system", "content": system_prompt},
             {"role": "assistant", "content": "Hey there, how can I help you today?"}
         ]
-
-# Function to save conversations to a file
-def save_conversations(conversations):
-    with open('conversations.json', 'w') as f:
-        json.dump(conversations, f)
-
-# Function to load notes from a file
-def load_notes():
-    try:
-        with open('notes.json', 'r') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
-
-# Function to extract text from a PDF
-def extract_text_from_pdf(uploaded_file):
-    reader = PdfReader(uploaded_file)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text()
-    return text
-
-# Function to split text into chunks
-def split_text_into_chunks(text, chunk_size=500):
-    chunks = []
-    for i in range(0, len(text), chunk_size):
-        chunks.append(text[i:i + chunk_size])
-    return chunks
-
-# Function to generate and store embeddings
-def generate_and_store_embeddings(chunks):
-    for i, chunk in enumerate(chunks):
-        embedding = get_embedding(chunk, engine="text-embedding-ada-002")
-        index.upsert([(f"chunk-{i}", embedding, {"text": chunk})])
-
-# Function to retrieve relevant chunks
-def retrieve_relevant_chunks(query, top_k=3):
-    query_embedding = get_embedding(query, engine="text-embedding-ada-002")
-    results = index.query(query_embedding, top_k=top_k, include_metadata=True)
-    relevant_chunks = [match["metadata"]["text"] for match in results["matches"]]
-    return relevant_chunks
 
 # Streamlit App Title
 st.markdown("<h1 style='color:white;'>StudyGPT</h1>", unsafe_allow_html=True)
