@@ -28,7 +28,7 @@ if index_name not in pc.list_indexes().names():
 index = pc.Index(index_name)
 
 # System prompt
-system_prompt = "You are StudyGPT, a helpful AI assistant designed to help students learn and solve problems. Provide detailed explanations and guide users to understand concepts."
+system_prompt = "You are StudyGPT, a helpful AI assistant designed to help students learn and solve problems. Provide detailed explanations and guide users to understand concepts. If the question involves math, format equations using LaTeX."
 
 # Function to load conversations from a file
 def load_conversations():
@@ -201,7 +201,6 @@ if user_input:
         "You are a helpful assistant. Use the following context to answer the user's question.\n\n"
         f"Context:\n{context}\n\n"
         f"Question: {user_input}\n\n"
-        "If the question involves math, format equations using LaTeX."
     )
 
     # Add the augmented prompt to the conversation history
