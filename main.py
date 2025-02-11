@@ -38,7 +38,7 @@ def load_conversations():
     except (FileNotFoundError, json.JSONDecodeError):
         return [
             {"role": "system", "content": system_prompt},
-            {"role": "assistant", "content": "Hey there, how can I help you today?"}
+            {"role": "assistant", "content": "Hey there, how can I help?"}
         ]
 
 # Function to save conversations to a file
@@ -200,7 +200,8 @@ if user_input:
     augmented_prompt = (
         "You are a helpful assistant. Use the following context to answer the user's question.\n\n"
         f"Context:\n{context}\n\n"
-        f"Question: {user_input}"
+        f"Question: {user_input}\n\n"
+        "If the question involves math, format equations using LaTeX."
     )
 
     # Add the augmented prompt to the conversation history
@@ -219,7 +220,17 @@ if user_input:
                 temperature=chosen_temperature,
             )
             response = completion.choices[0].message.content
-            st.markdown(response)
+
+            # Check if the response contains LaTeX math content
+            if "$$" in response or "\\(" in response or "\\[" in response:
+                # Extract LaTeX portion and render it
+                st.markdown(response)  # Render the entire response as markdown
+                if "$$" in response:
+                    latex_content = response.split("$$")[1]
+                    st.latex(latex_content)
+            else:
+                st.markdown(response)  # Render normal text response
+
         except Exception as e:
             st.error(f"An error occurred: {e}")
             response = "Sorry, I couldn't generate a response. Please try again."
@@ -229,3 +240,4 @@ if user_input:
 
     # Save updated conversation history to file
     save_conversations(st.session_state.messages)
+
