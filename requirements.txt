@@ -1,6 +1,6 @@
 streamlit
 openai
 pypdf
-pinecone-
+pinecone
 PyGithub
 langchain
