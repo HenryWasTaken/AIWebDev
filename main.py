@@ -1,7 +1,6 @@
 import os
 import json
 from openai import OpenAI
-from dotenv import load_dotenv
 from prompt import system_prompt
 from AIImage import generate_image
 import streamlit as st
