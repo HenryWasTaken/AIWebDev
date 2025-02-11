@@ -3,7 +3,7 @@ import json
 from openai import OpenAI
 import streamlit as st
 from pypdf import PdfReader
-import pinecone
+from pinecone import Pinecone, ServerlessSpec
 
 
 # Load environment variables (if using .env)
