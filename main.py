@@ -176,7 +176,7 @@ if "messages" not in st.session_state:
 if st.button("Reset Chat"):
     st.session_state.messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "assistant", "content": "Hey there, how can I help you today?"}
+        {"role": "assistant", "content": "Hey there, how can I help?"}
     ]
     save_conversations(st.session_state.messages)
     st.success("Chat history has been reset.")
