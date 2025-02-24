@@ -77,13 +77,22 @@ def split_text_into_chunks(text, chunk_size=500):
     return chunks
 
 # Function to generate embeddings
+'''
 def get_embedding(text, engine="text-embedding-ada-002"):
     response = client.embeddings.create(
         input=text,
         model=engine
     )
     return response.data[0].embedding
+'''
 
+def get_embeddings_batch(texts, engine="text-embedding-ada-002"):
+    response = client.embeddings.create(
+        input=texts,
+        model=engine
+    )
+    return [data.embedding for data in response.data]
+    
 # Function to generate and store embeddings
 def generate_and_store_embeddings(chunks):
     for i, chunk in enumerate(chunks):
