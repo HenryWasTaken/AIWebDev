@@ -86,7 +86,7 @@ def get_embedding(text, engine="text-embedding-ada-002"):
     return response.data[0].embedding
 '''
 
-def get_embeddings_batch(texts, engine="text-embedding-ada-002"):
+def get_embedding(text, engine="text-embedding-ada-002"): #Batch
     response = client.embeddings.create(
         input=texts,
         model=engine
