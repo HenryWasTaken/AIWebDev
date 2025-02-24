@@ -1,5 +1,5 @@
 streamlit
-pinecone
+pinecone-client
 openai
 pypdf
 
