@@ -55,11 +55,12 @@ def load_notes():
         return []
 
 # Function to extract text from a PDF
-
 def extract_text_from_pdf(uploaded_file):
     reader = PdfReader(uploaded_file)
+    text = ""
     for page in reader.pages:
-        yield page.extract_text()
+        text += page.extract_text()
+    return text
 
 # Function to split text into chunks
 def split_text_into_chunks(text, chunk_size=500):
